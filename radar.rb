@@ -17,6 +17,12 @@ class Radar
   def find_invaders(sample)
     return [] if sample.nil?
     sample_display = Sample.new(extract_display_data(sample))
+    matched_invaders(invaders, sample_display)
+  end
+
+  private
+
+  def matched_invaders(invaders, sample_display)
     invaders.each_with_object([]) do |invader, result|
       max_left_top = sample_display.width - invader.width
       max_left_bottom = sample_display.height - invader.height
@@ -28,8 +34,6 @@ class Radar
       end
     end
   end
-
-  private
 
   def invader_matches?(sample_display, point, invader, allowed_noise = 0) # TODO: configure allowed noise through injection
     noise = 0
@@ -50,16 +54,21 @@ class Radar
   end
 
   def split_lines(joined_line)
-    joined_line.split.tap { |res| validate_lines_points!(res) }
+    joined_line.split.tap do |res|
+      assert_allowed_points!(res)
+      assert_rectangle!(res)
+    end
   end
 
-  def validate_lines_points!(lines)
-    lines.each(&method(:validate_line_points!))
+  def assert_rectangle!(res)
+    raise ArgumentError, "sample or invader must be rectangular" if res.map(&:size).uniq.size > 1
   end
 
-  def validate_line_points!(line)
-    line.each_char do |char|
-      raise ArgumentError, "not allowed char: #{char}" unless ALLOWED_POINTS.include?(char)
+  def assert_allowed_points!(lines)
+    lines.each do |line|
+      line.each_char do |char|
+        raise ArgumentError, "not allowed char: #{char}" unless ALLOWED_POINTS.include?(char)
+      end
     end
   end
 end

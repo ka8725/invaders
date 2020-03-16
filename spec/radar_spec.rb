@@ -50,5 +50,17 @@ RSpec.describe Radar do
         expect(subject).to eq([point(0, 0)])
       end
     end
+
+    context 'when sample does not have invaders' do
+      context 'with empty sample' do
+        let(:sample) { '' }
+        it { is_expected.to eq([]) }
+      end
+
+      context 'with unmatched sample' do
+        let(:sample) { "00\n00" }
+        it { is_expected.to eq([]) }
+      end
+    end
   end
 end
