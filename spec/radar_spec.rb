@@ -1,7 +1,8 @@
+# TODO: edge case invader greater than sample
 RSpec.describe Radar do
   subject(:radar) { described_class.new(invaders) }
 
-  let(:invaders) { ["--\n00"] }
+  let(:invaders) { ["--\noo"] }
 
   def point(x, y)
     described_class::Point.new(x: x, y: y)
@@ -15,13 +16,13 @@ RSpec.describe Radar do
     subject { radar.invaders }
 
     context 'when some invaders are nil' do
-      let(:invaders) { [nil, '0'] }
-      it { is_expected.to eq([invader(['0'])]) }
+      let(:invaders) { [nil, 'o'] }
+      it { is_expected.to eq([invader(['o'])]) }
     end
 
     context 'when invader is a multiline' do
-      let(:invaders) { ["0\n-"] }
-      it { is_expected.to eq([invader(['0', '-'])]) }
+      let(:invaders) { ["o\n-"] }
+      it { is_expected.to eq([invader(['o', '-'])]) }
     end
   end
 
@@ -30,36 +31,49 @@ RSpec.describe Radar do
 
     context 'when sample is empty string' do
       let(:sample) { '' }
-      it { is_expected.to eq([]) }
+      it { is_expected.to eq([].to_set) }
     end
 
     context 'when sample is nil' do
       let(:sample) { nil }
-      it { is_expected.to eq([]) }
+      it { is_expected.to eq([].to_set) }
     end
 
     context 'when sample is "\n"' do
       let(:sample) { "\n" }
-      it { is_expected.to eq([]) }
+      it { is_expected.to eq([].to_set) }
     end
 
     context 'when sample has invaders' do
-      let(:sample) { "--\n00" }
+      let(:sample) { "--\noo" }
 
       it 'returns invaders coordinates' do
-        expect(subject).to eq([point(0, 0)])
+        expect(subject).to eq([point(0, 0)].to_set)
       end
     end
 
     context 'when sample does not have invaders' do
       context 'with empty sample' do
         let(:sample) { '' }
-        it { is_expected.to eq([]) }
+        it { is_expected.to eq([].to_set) }
       end
 
       context 'with unmatched sample' do
-        let(:sample) { "00\n00" }
-        it { is_expected.to eq([]) }
+        let(:sample) { "oo\noo" }
+        it { is_expected.to eq([].to_set) }
+      end
+    end
+
+    context 'with real invaders and sample' do
+      let(:sample) { File.read("#{__dir__}/fixtures/sample.txt") }
+      let(:invaders) { File.read("#{__dir__}/fixtures/invaders.txt").split('~') }
+
+      it { is_expected.to eq([].to_set) }
+
+      context 'when increased allowed noise' do
+        subject { radar.find_invaders(sample, allowed_noise: 8) }
+
+        it { is_expected.to eq([point(13, 60), point(0, 42)].to_set) }
       end
     end
   end
