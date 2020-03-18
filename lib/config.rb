@@ -1,5 +1,3 @@
-require 'singleton'
-
 class Config
   attr_accessor :invaders, :noise_threshold, :sheet_builders
 
