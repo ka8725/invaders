@@ -1,16 +1,16 @@
 # TODO: edge case invader greater than sample
-RSpec.describe Radar do
+RSpec.describe App do
   subject(:radar) { described_class.new(invaders: invaders, sample: sample) }
 
   let(:invaders) { ["--\noo"] }
   let(:sample) { "--\noo" }
 
   def point(x, y)
-    described_class::Point.new(x: x, y: y)
+    Point.new(x: x, y: y)
   end
 
   def sheet(lines)
-    described_class::Sheet.new(lines: lines, width: lines.first&.size || 0, height: lines.size)
+    Sheet.new(lines: lines, width: lines.first&.size || 0, height: lines.size)
   end
 
   describe '#initialize' do
@@ -118,7 +118,13 @@ RSpec.describe Radar do
       it { is_expected.to eq([].to_set) }
 
       context 'when increased allowed noise' do
-        subject { radar.find_invaders(noise_threshold: 8) }
+        around do |example|
+          old_noise = Config.instance.noise_threshold
+          Config.instance.noise_threshold = 8
+          example.run
+        ensure
+          Config.instance.noise_threshold = old_noise
+        end
 
         it { is_expected.to eq([point(13, 60), point(0, 42)].to_set) }
       end
