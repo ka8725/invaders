@@ -55,6 +55,8 @@ class App
     end
   end
 
+  private_constant :Matcher
+
   # @param sample [String] a joined string of the sample
   # @return [Array<Point>] left top corners of the found invaders for the given sample
   # @raise [StandardError] @see Sheet.build for more details
