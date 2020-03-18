@@ -23,7 +23,7 @@ class Sheet
     end
 
     def build_sheet(joined_string)
-      lines = split_lines(joined_string)
+      lines = split_lines(joined_string || '')
       Sheet.new(lines: lines, width: lines.first&.size || 0, height: lines.size)
     end
 

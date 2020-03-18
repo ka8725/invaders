@@ -1,4 +1,3 @@
-# TODO: edge case invader greater than sample
 RSpec.describe App do
   let(:app) { described_class.new(invaders: invaders) }
 
@@ -9,34 +8,12 @@ RSpec.describe App do
     Point.new(x: x, y: y)
   end
 
-  def sheet(lines)
-    Sheet.new(lines: lines, width: lines.first&.size || 0, height: lines.size)
-  end
-
   describe '#find_invaders' do
     subject { app.find_invaders(sample) }
 
-    context 'when sample is empty string' do
-      let(:sample) { '' }
-      it { is_expected.to eq([]) }
-    end
-
-    context 'when sample is nil' do
-      let(:sample) { nil }
-      it { is_expected.to eq([]) }
-    end
-
-    context 'when sample is "\n"' do
-      let(:sample) { "\n" }
-      it { is_expected.to eq([]) }
-    end
-
     context 'when sample has invaders' do
       let(:sample) { "--\noo" }
-
-      it 'returns invaders coordinates' do
-        expect(subject).to eq([point(0, 0)])
-      end
+      it { is_expected.to eq([point(0, 0)]) }
     end
 
     context 'when sample does not have invaders' do
@@ -47,6 +24,11 @@ RSpec.describe App do
 
       context 'with unmatched sample' do
         let(:sample) { "oo\noo" }
+        it { is_expected.to eq([]) }
+      end
+
+      context 'with sample smaller than invaders' do
+        let(:sample) { '-' }
         it { is_expected.to eq([]) }
       end
     end

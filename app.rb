@@ -19,7 +19,7 @@ class App
   # @return [Array<Point>] left top corners of the found invaders for the given sample
   # @raise [StandardError] @see Sheet.build for more details
   def find_invaders(sample)
-    sample = Sheet.build(:sample, sample || '', config)
+    sample = Sheet.build(:sample, sample, config)
     Matcher.new(config).matched_invaders(sample)
   end
 

@@ -7,8 +7,8 @@ class Config
     @invaders = []
     @noise_threshold = 0
     @sheet_builders = {}
-    register_sheet_builder(:invader, ['o', '-'], Sheet::InvaderBuilder)
-    register_sheet_builder(:sample, ['o', '-', 'O'], Sheet::SampleBuilder)
+    register_sheet_builder(:invader, %w[o -], Sheet::InvaderBuilder)
+    register_sheet_builder(:sample, %w[o - O], Sheet::SampleBuilder)
   end
 
   def self.configure
