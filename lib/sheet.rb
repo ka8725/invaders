@@ -45,15 +45,15 @@ class Sheet
     def assert_allowed_points!(lines)
       lines.each do |line|
         line.each_char do |char|
-          unless allowed_points.include?(char)
+          unless allowed_point?(char)
             raise ArgumentError, "not allowed char for #{entity_type}: #{char}"
           end
         end
       end
     end
 
-    def allowed_points
-      self.class.allowed_points
+    def allowed_point?(char)
+      self.class.allowed_points.include?(char)
     end
   end
 

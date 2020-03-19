@@ -1,12 +1,20 @@
 class Config
   attr_accessor :invaders, :noise_threshold, :sheet_builders
 
+  class Wildcard < String
+    def include?(char)
+      true
+    end
+  end
+
+  private_constant :Wildcard
+
   def initialize
     @invaders = []
     @noise_threshold = 0
     @sheet_builders = {}
-    register_sheet_builder(:invader, %w[o -], Sheet::InvaderBuilder)
-    register_sheet_builder(:sample, %w[o - O], Sheet::SampleBuilder)
+    register_sheet_builder(:invader, 'o-', Sheet::InvaderBuilder)
+    register_sheet_builder(:sample, Wildcard.new, Sheet::SampleBuilder)
   end
 
   def self.configure

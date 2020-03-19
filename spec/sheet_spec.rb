@@ -36,9 +36,9 @@ RSpec.describe Sheet do
         it { is_expected.to eq(sheet(['O'])) }
       end
 
-      context 'when has invalid point' do
+      context 'when has unknown point' do
         let(:sheet_string) { 'x' }
-        specify { expect { subject }.to raise_error(ArgumentError, 'not allowed char for sample: x') }
+        it { is_expected.to eq(sheet(['x'])) }
       end
 
       context 'when is not rectangular' do
