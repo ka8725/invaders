@@ -4,8 +4,8 @@ RSpec.describe App do
   let(:invaders) { ["--\noo"] }
   let(:sample) { "--\noo" }
 
-  def match(row, column, invader)
-    Match.new(point: Point.new(row: row, column: column), invader: invader)
+  def match(row, column, invader, penalty)
+    Match.new(point: Point.new(row: row, column: column), invader: invader, match_penalty: penalty)
   end
 
   describe '#find_invaders' do
@@ -13,7 +13,7 @@ RSpec.describe App do
 
     context 'when sample has invaders' do
       let(:sample) { "--\noo" }
-      it { is_expected.to eq([match(0, 0, 0)]) }
+      it { is_expected.to eq([match(0, 0, 0, 0)]) }
     end
 
     context 'when sample does not have invaders' do
@@ -36,7 +36,7 @@ RSpec.describe App do
     context 'when invader has 4 matches' do
       let(:sample) { "---\n---\n---" }
       let(:invaders) { ["--\n--"] }
-      it { is_expected.to eq([match(0, 0, 0), match(0, 1, 0), match(1, 0, 0), match(1, 1, 0)]) }
+      it { is_expected.to eq([match(0, 0, 0, 0), match(0, 1, 0, 0), match(1, 0, 0, 0), match(1, 1, 0, 0)]) }
     end
 
     context 'with real invaders and sample' do
@@ -48,7 +48,7 @@ RSpec.describe App do
       context 'when increased noise threshold' do
         let(:app) { described_class.new(invaders: invaders, mismatch_threshold: 8) }
 
-        it { is_expected.to eq([match(13, 60, 0), match(0, 42, 1)]) }
+        it { is_expected.to eq([match(13, 60, 0, 8), match(0, 42, 1, 8)]) }
       end
     end
   end
