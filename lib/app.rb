@@ -1,6 +1,7 @@
 require_relative './config'
 require_relative './sheet'
 require_relative './point'
+require_relative './match'
 
 # Entry point of the application.
 #
@@ -18,13 +19,15 @@ class App
     # @param sample [Sheet]
     # @return [Array<Point>]
     def matched_invaders(sample)
-      app_config.invaders.each_with_object([]) do |invader, result|
+      app_config.invaders.each_with_object([]).with_index do |(invader, result), index|
         max_row = sample.height - invader.height
         max_column = sample.width - invader.width
         (0..max_row).each do |row|
           (0..max_column).each do |column|
-            point = Point.new(row: row, column: column)
-            result << point if invader_matches?(sample, point, invader)
+            left_top_sample_corner = Point.new(row: row, column: column)
+            if invader_matches?(sample, left_top_sample_corner, invader)
+              result << Match.new(point: left_top_sample_corner, invader: index)
+            end
           end
         end
       end
