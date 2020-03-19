@@ -54,6 +54,10 @@ class App
     # 0 - when matches
     # 1 - mismatch and sample char is not a noise
     # 0.5 - mismatch and sample char is a noise
+    # @param sample_char [String]
+    # @param invader_char [String]
+    # @return [Number]
+    # @note The algorithm can be advanced further, e.g. if the mismatching points a two close they can give an increase coefficient.
     def mismatch_score(sample_char, invader_char)
       is_noise = !app_config.sheet_builders[:invader].allowed_points.include?(sample_char)
       case {matches: sample_char == invader_char, is_noise: is_noise}
