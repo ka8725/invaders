@@ -1,3 +1,5 @@
+[requirements][./marketer-ruby-assignment.md]
+
 ### How to use
 
 1. Install required Ruby version (see `.ruby-version`)
