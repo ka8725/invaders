@@ -17,7 +17,7 @@ class App
     end
 
     # @param sample [Sheet]
-    # @return [Array<Point>]
+    # @return [Array<Match>]
     def matched_invaders(sample)
       app_config.invaders.each_with_object([]).with_index do |(invader, result), index|
         max_row = sample.height - invader.height
@@ -41,10 +41,29 @@ class App
       mismatches = 0
       invader.each_point do |invader_point|
         sample_point = start_point + invader_point
-        mismatches += 1 if sample.at(sample_point) != invader.at(invader_point)
-        return false if mismatches > app_config.mismatch_threshold
+        mismatches += mismatch_score(sample.at(sample_point), invader.at(invader_point))
       end
-      true
+      !threshold_reached?(mismatches)
+    end
+
+    def threshold_reached?(mismatches)
+      mismatches > app_config.mismatch_threshold
+    end
+
+    # Calculates a penalty score for the given chars match:
+    # 0 - when matches
+    # 1 - mismatch and sample char is not a noise
+    # 0.5 - mismatch and sample char is a noise
+    def mismatch_score(sample_char, invader_char)
+      is_noise = !app_config.sheet_builders[:invader].allowed_points.include?(sample_char)
+      case {matches: sample_char == invader_char, is_noise: is_noise}
+      in {matches: true, is_noise: _}
+        0
+      in {matches: false, is_noise: true}
+        0.5
+      in {matches: false, is_noise: false}
+        1
+      end
     end
   end
 
@@ -58,7 +77,7 @@ class App
   private_constant :Matcher
 
   # @param sample [String] a joined string of the sample
-  # @return [Array<Point>] left top corners of the found invaders for the given sample
+  # @return [Array<Match>] left top corners of the found invaders for the given sample and the invaders indexes
   # @raise [StandardError] @see Sheet.build for more details
   def find_invaders(sample)
     sample = Sheet.build(:sample, sample, config)
