@@ -5,7 +5,7 @@
 
 ```ruby
 require 'app'
-app = App.new(invaders: ["--\noo", "--\n-o"], noise_threshold: 1)
+app = App.new(invaders: ["--\noo", "--\n-o"], mismatch_threshold: 1)
 app.find_invaders("--\n-o")
 app.find_invaders("-o\noo")
 app.find_invaders("---\n-oo")

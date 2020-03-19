@@ -1,1 +1,1 @@
-Point = Struct.new(:x, :y, keyword_init: true)
+Point = Struct.new(:row, :column, keyword_init: true)

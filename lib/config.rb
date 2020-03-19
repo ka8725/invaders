@@ -1,5 +1,5 @@
 class Config
-  attr_accessor :invaders, :noise_threshold, :sheet_builders
+  attr_accessor :invaders, :mismatch_threshold, :sheet_builders
 
   class Wildcard < String
     def include?(char)
@@ -11,7 +11,7 @@ class Config
 
   def initialize
     @invaders = []
-    @noise_threshold = 0
+    @mismatch_threshold = 0
     @sheet_builders = {}
     register_sheet_builder(:invader, 'o-', Sheet::InvaderBuilder)
     register_sheet_builder(:sample, Wildcard.new, Sheet::SampleBuilder)

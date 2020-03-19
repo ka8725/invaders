@@ -4,8 +4,8 @@ RSpec.describe App do
   let(:invaders) { ["--\noo"] }
   let(:sample) { "--\noo" }
 
-  def point(x, y)
-    Point.new(x: x, y: y)
+  def point(row, column)
+    Point.new(row: row, column: column)
   end
 
   describe '#find_invaders' do
@@ -40,7 +40,7 @@ RSpec.describe App do
       it { is_expected.to eq([]) }
 
       context 'when increased noise threshold' do
-        let(:app) { described_class.new(invaders: invaders, noise_threshold: 8) }
+        let(:app) { described_class.new(invaders: invaders, mismatch_threshold: 8) }
 
         it { is_expected.to eq([point(13, 60), point(0, 42)]) }
       end

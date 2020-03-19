@@ -66,11 +66,6 @@ class Sheet
     self.entity_type = :sample
   end
 
-  BUILDERS = {
-    invader: InvaderBuilder,
-    sample: SampleBuilder
-  }
-
   attr_reader :lines, :width, :height
 
   def initialize(lines:, width:, height:)
@@ -88,6 +83,20 @@ class Sheet
   # @raise [ArgumentError] if the joined string does not pass the validation rules, @see BaseBuilder
   def self.build(entity_type, joined_string, app_config)
     app_config.sheet_builders.fetch(entity_type).build_sheet(joined_string)
+  end
+
+  # Returns a char for the given zero-based row and column.
+  #
+  # @param row [Integer]
+  # @param column [Integer]
+  #
+  # @return [Char]
+  # @raise [ArgumentError] for an index outbound
+  def at(row, column)
+    if row >= height || column >= width
+      raise ArgumentError, "outbound indexes (#{row}, #{column}) for the sheet (#{height}x#{width})"
+    end
+    lines[row][column]
   end
 
   def ==(other)
