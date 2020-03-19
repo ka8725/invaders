@@ -100,12 +100,6 @@ class Sheet
   end
 
   def each_point
-    # TODO: lazy? Enumerator.new do |yielder|
-    # e = Enumerator.new do |yielder|
-    #   [1,2,3].each do |val|
-    #     yielder << val
-    #   end
-    # end
     (0..height.pred).each do |row|
       (0..width.pred).each do |column|
         yield Point.new(row: row, column: column)
