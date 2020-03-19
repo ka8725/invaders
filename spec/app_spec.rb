@@ -33,6 +33,12 @@ RSpec.describe App do
       end
     end
 
+    context 'when invader has 4 matches' do
+      let(:sample) { "---\n---\n---" }
+      let(:invaders) { ["--\n--"] }
+      it { is_expected.to eq([match(0, 0, 0), match(0, 1, 0), match(1, 0, 0), match(1, 1, 0)]) }
+    end
+
     context 'with real invaders and sample' do
       let(:sample) { File.read("#{__dir__}/fixtures/sample.txt") }
       let(:invaders) { File.read("#{__dir__}/fixtures/invaders.txt").split('~') }

@@ -100,9 +100,11 @@ class Sheet
   end
 
   def each_point
-    (0..height.pred).each do |row|
-      (0..width.pred).each do |column|
-        yield Point.new(row: row, column: column)
+    Enumerator.new do |yielder|
+      (0..height.pred).each do |row|
+        (0..width.pred).each do |column|
+          yielder << Point.new(row: row, column: column)
+        end
       end
     end
   end

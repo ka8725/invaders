@@ -25,8 +25,9 @@ class App
         (0..max_row).each do |row|
           (0..max_column).each do |column|
             left_top_sample_corner = Point.new(row: row, column: column)
-            if invader_matches?(sample, left_top_sample_corner, invader)
-              result << Match.new(point: left_top_sample_corner, invader: index)
+            penalty = mismatch_penalty(sample, left_top_sample_corner, invader)
+            unless threshold_reached?(penalty)
+              result << Match.new(point: left_top_sample_corner, invader: index, )
             end
           end
         end
@@ -37,17 +38,15 @@ class App
 
     attr_reader :app_config
 
-    def invader_matches?(sample, start_point, invader)
-      mismatches = 0
-      invader.each_point do |invader_point|
+    def mismatch_penalty(sample, start_point, invader)
+      invader.each_point.sum do |invader_point|
         sample_point = start_point + invader_point
-        mismatches += penalty_score(sample.at(sample_point), invader.at(invader_point))
+        penalty_score(sample.at(sample_point), invader.at(invader_point))
       end
-      !threshold_reached?(mismatches)
     end
 
-    def threshold_reached?(mismatches)
-      mismatches > app_config.mismatch_threshold
+    def threshold_reached?(penalty)
+      penalty > app_config.mismatch_threshold
     end
 
     # Calculates a penalty score for the given chars match:
