@@ -1,5 +1,7 @@
 ### How to use
 
+1. Install required Ruby version (see `.ruby-version`)
+1. Install dependencies: `bundle install`
 1. Run irb: `irb -I lib`
 1. Do experiments there:
 
