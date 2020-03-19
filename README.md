@@ -1,4 +1,4 @@
-[requirements][./marketer-ruby-assignment.md]
+[requirements](./marketer-ruby-assignment.md)
 
 ### How to use
 
