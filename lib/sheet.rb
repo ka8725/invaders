@@ -85,18 +85,32 @@ class Sheet
     app_config.sheet_builders.fetch(entity_type).build_sheet(joined_string)
   end
 
-  # Returns a char for the given zero-based row and column.
+  # Returns a char for the given Point(row, column) with zero-based indexes.
   #
-  # @param row [Integer]
-  # @param column [Integer]
+  # @param point [Point]
   #
   # @return [Char]
   # @raise [ArgumentError] for an index outbound
-  def at(row, column)
+  def at(point)
+    row, column = point.row, point.column
     if row >= height || column >= width
       raise ArgumentError, "outbound indexes (#{row}, #{column}) for the sheet (#{height}x#{width})"
     end
     lines[row][column]
+  end
+
+  def each_point
+    # TODO: lazy? Enumerator.new do |yielder|
+    # e = Enumerator.new do |yielder|
+    #   [1,2,3].each do |val|
+    #     yielder << val
+    #   end
+    # end
+    (0..height.pred).each do |row|
+      (0..width.pred).each do |column|
+        yield Point.new(row: row, column: column)
+      end
+    end
   end
 
   def ==(other)

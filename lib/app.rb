@@ -6,7 +6,7 @@ require_relative './point'
 #
 # @example
 #   app = App.new(invaders: ["--\--"], mismatch_threshold: 1)
-#   app.find_invaders("--\-O") => [Point.new(x: 0, y: 0)]
+#   app.find_invaders("--\-O") => [Point.new(row: 0, column: 0)]
 class App
   # Incapsulates the matching functionality.
   class Matcher
@@ -36,13 +36,10 @@ class App
 
     def invader_matches?(sample, start_point, invader)
       mismatches = 0
-      (0..invader.height.pred).each do |invader_row|
-        (0..invader.width.pred).each do |invader_column|
-          sample_row = invader_row + start_point.row
-          sample_column = invader_column + start_point.column
-          mismatches += 1 if sample.at(sample_row, sample_column) != invader.at(invader_row, invader_column)
-          return false if mismatches > app_config.mismatch_threshold
-        end
+      invader.each_point do |invader_point|
+        sample_point = start_point + invader_point
+        mismatches += 1 if sample.at(sample_point) != invader.at(invader_point)
+        return false if mismatches > app_config.mismatch_threshold
       end
       true
     end
