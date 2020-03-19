@@ -41,7 +41,7 @@ class App
       mismatches = 0
       invader.each_point do |invader_point|
         sample_point = start_point + invader_point
-        mismatches += mismatch_score(sample.at(sample_point), invader.at(invader_point))
+        mismatches += penalty_score(sample.at(sample_point), invader.at(invader_point))
       end
       !threshold_reached?(mismatches)
     end
@@ -58,7 +58,7 @@ class App
     # @param invader_char [String]
     # @return [Number]
     # @note The algorithm can be advanced further, e.g. if the mismatching points a two close they can give an increase coefficient.
-    def mismatch_score(sample_char, invader_char)
+    def penalty_score(sample_char, invader_char)
       is_noise = !app_config.sheet_builders[:invader].allowed_points.include?(sample_char)
       case {matches: sample_char == invader_char, is_noise: is_noise}
       in {matches: true, is_noise: _}
